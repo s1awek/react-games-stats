@@ -39,5 +39,6 @@
   },
   "devDependencies": {
     "sass": "^1.49.9"
-  }
+  },
+  "proxy": "https://api.igdb.com"
 }
