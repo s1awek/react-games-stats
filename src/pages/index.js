@@ -1,5 +1,7 @@
 /** @format */
 
-import { Home } from './Home';
-import { SingleGame } from './SingleGame';
-export { Home, SingleGame };
+import { HomePage } from './HomePage';
+import { SingleGamePage } from './SingleGamePage';
+import { ContactPage } from './ContactPage';
+import { ErrorPage } from './ErrorPage';
+export { HomePage, SingleGamePage, ContactPage, ErrorPage };

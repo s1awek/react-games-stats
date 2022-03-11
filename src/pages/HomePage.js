@@ -4,7 +4,7 @@ import React from 'react';
 import useFetch from '../hooks/useFetch';
 import { Loading, Error } from '../components';
 
-export const Home = () => {
+export const HomePage = () => {
   const { isLoading, error, data } = useFetch({ endpoint: 'games', body: 'fields *;' });
   if (isLoading) {
     return <Loading />;
