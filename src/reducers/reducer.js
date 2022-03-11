@@ -6,6 +6,7 @@ const initialState = {
 };
 export const reducer = (state = initialState, action) => {
   if (action.type === SEARCH) {
+    console.log(action.payload.term);
     return { ...state };
   }
   return state;

@@ -5,7 +5,9 @@ import { Nav, Navbar, Container, Button, Form, FormControl, Image } from 'react-
 import styled from 'styled-components';
 import logo from '../assets/img/logo.svg';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useGlobalContext } from '../context/context';
 export const Header = () => {
+  const { handleSearch } = useGlobalContext();
   return (
     <Wrapper>
       <Navbar bg='dark' variant='dark' expand='lg'>
@@ -26,7 +28,7 @@ export const Header = () => {
               </LinkContainer>
             </Nav>
             <Form className='d-flex'>
-              <FormControl type='search' placeholder='Search' className='me-2' aria-label='Search' />
+              <FormControl type='search' placeholder='Search' className='me-2' aria-label='Search' onChange={(e) => handleSearch(e.target.value)} />
               <Button variant='primary'>Search</Button>
             </Form>
           </Navbar.Collapse>
