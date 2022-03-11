@@ -5,7 +5,7 @@ const initialState = {
   searchTerm: '',
 };
 export const reducer = (state = initialState, action) => {
-  if ((action.type = SEARCH)) {
+  if (action.type === SEARCH) {
     return { ...state };
   }
   return state;
