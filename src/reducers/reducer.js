@@ -1,13 +1,22 @@
 /** @format */
 
-import { SEARCH } from '../actions/action';
-const initialState = {
-  searchTerm: '',
-};
-export const reducer = (state = initialState, action) => {
+import { SEARCH, GET_GAMES_BEGIN, GET_GAMES_ERROR, GET_GAMES_SUCCESS } from '../actions/action';
+
+export const reducer = (state, action) => {
   if (action.type === SEARCH) {
-    console.log(action.payload.term);
-    return { ...state };
+    const searchTerm = action.payload.searchTerm;
+    return { ...state, searchTerm };
+  }
+  if (action.type === GET_GAMES_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === GET_GAMES_ERROR) {
+    console.log(GET_GAMES_ERROR);
+    return { ...state, isLoading: false, error: action.payload };
+  }
+  if (action.type === GET_GAMES_SUCCESS) {
+    console.log(GET_GAMES_SUCCESS);
+    return { ...state, isLoading: false, data: action.payload };
   }
   return state;
 };
