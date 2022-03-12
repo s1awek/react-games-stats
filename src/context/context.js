@@ -11,7 +11,10 @@ export const Provider = ({ children }) => {
     isLoading: true,
     error: { show: false, msg: '' },
     data: [],
-    urlApiData: { endpoint: 'games', body: 'fields *;' },
+    urlApiData: {
+      endpoint: 'games',
+      body: 'fields *, cover.*, websites.*, alternative_names.*, external_games.*, game_modes.*, genres.*, involved_companies.company.*, game_engines.*, keywords.*, screenshots.*, release_dates.*, platforms.*, similar_games.*, themes.*,player_perspectives.*,screenshots.*;',
+    },
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -19,7 +22,7 @@ export const Provider = ({ children }) => {
     const searchTerm = e.target.value;
     dispatch({ type: SEARCH, payload: { searchTerm } });
   };
-  //TODO: Refactor fetching data
+  //TODO: Refactor fetching function
   const fetchTwitchData = (urlApiData) => {
     const { endpoint, body } = urlApiData;
     dispatch({ type: GET_GAMES_BEGIN });

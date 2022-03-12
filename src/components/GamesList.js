@@ -3,6 +3,7 @@
 import React from 'react';
 import { useGlobalContext } from '../context/context';
 import { Error, Loading, GameBox } from '../components';
+import { Row, Col } from 'react-bootstrap';
 export const GamesList = () => {
   const { isLoading, error, data } = useGlobalContext();
   if (isLoading) {
@@ -12,10 +13,16 @@ export const GamesList = () => {
     return <Error />;
   }
   return (
-    <div>
-      {data.map((item) => {
-        return <div key={item.id}>{item.name}</div>;
-      })}
-    </div>
+    <main className='main'>
+      <Row className='gy-5'>
+        {data.map((game) => {
+          return (
+            <Col lg={4} key={game.id}>
+              <GameBox game={game} />
+            </Col>
+          );
+        })}
+      </Row>
+    </main>
   );
 };

@@ -10,22 +10,26 @@ import Col from 'react-bootstrap/Col';
 const App = () => {
   return (
     <Router>
-      <Header />
-      <Container>
-        <Row>
-          <Col lg={4}>
-            <Sidebar />
-          </Col>
-          <Col lg={8}>
-            <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/contact' element={<ContactPage />} />
-              <Route path='/games/:id' element={<SingleGamePage />} />
-              <Route path='*' element={<ErrorPage />} />
-            </Routes>
-          </Col>
-        </Row>
-      </Container>
+      <section className='header'>
+        <Header />
+      </section>
+      <section className='page'>
+        <Container>
+          <Row>
+            <Col lg={4}>
+              <Sidebar />
+            </Col>
+            <Col lg={8}>
+              <Routes>
+                <Route path='/' element={<HomePage />} />
+                <Route path='/contact' element={<ContactPage />} />
+                <Route path='/games/:id' element={<SingleGamePage />} />
+                <Route path='*' element={<ErrorPage />} />
+              </Routes>
+            </Col>
+          </Row>
+        </Container>
+      </section>
       <Footer />
     </Router>
   );

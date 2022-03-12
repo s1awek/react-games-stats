@@ -11,11 +11,9 @@ export const reducer = (state, action) => {
     return { ...state, isLoading: true };
   }
   if (action.type === GET_GAMES_ERROR) {
-    console.log(GET_GAMES_ERROR);
     return { ...state, isLoading: false, error: action.payload };
   }
   if (action.type === GET_GAMES_SUCCESS) {
-    console.log(GET_GAMES_SUCCESS);
     return { ...state, isLoading: false, data: action.payload };
   }
   return state;
