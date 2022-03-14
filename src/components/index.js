@@ -7,4 +7,5 @@ import { Footer } from './Footer';
 import { Sidebar } from './Sidebar';
 import { GamesList } from './GamesList';
 import { GameBox } from './GameBox';
-export { Loading, Error, Header, Footer, Sidebar, GamesList, GameBox };
+import { PagePagination } from './PagePagination';
+export { Loading, Error, Header, Footer, Sidebar, GamesList, GameBox, PagePagination };
