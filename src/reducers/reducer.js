@@ -19,6 +19,7 @@ export const reducer = (state, action) => {
   }
   if (action.type === GET_GAMES_SUCCESS) {
     //console.log('hello from GET_GAMES_SUCCESS)');
+    //
     return { ...state, areGamesLoading: false, data: action.payload };
   }
   if (action.type === GET_SINGLE_GAME_SUCCESS) {
