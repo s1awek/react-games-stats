@@ -1,6 +1,8 @@
 /** @format */
 
-import { SEARCH, GET_GAMES_BEGIN, GET_GAMES_ERROR, GET_GAMES_SUCCESS, CHANGE_PAGE } from '../actions/action';
+import { SEARCH, GET_GAMES_BEGIN, GET_GAMES_ERROR, GET_GAMES_SUCCESS, CHANGE_PAGE, GET_SINGLE_GAME_SUCCESS, GET_SINGLE_GAME_BEGIN, GET_SINGLE_GAME_ERROR } from '../actions/action';
+const defaultBody =
+  'fields *, cover.*, websites.*, alternative_names.*, external_games.*, game_modes.*, genres.*, involved_companies.company.*, game_engines.*, keywords.*, screenshots.*, release_dates.*, platforms.*, similar_games.*, themes.*,player_perspectives.*,screenshots.*; sort rating asc;';
 
 export const reducer = (state, action) => {
   if (action.type === SEARCH) {
@@ -8,16 +10,24 @@ export const reducer = (state, action) => {
     return { ...state, searchTerm };
   }
   if (action.type === GET_GAMES_BEGIN) {
-    return { ...state, isLoading: true };
+    //console.log('hello from GET_GAMES_BEGIN');
+    return { ...state, areGamesLoading: true };
   }
-  if (action.type === GET_GAMES_ERROR) {
-    return { ...state, isLoading: false, error: action.payload };
+  if (action.type === GET_SINGLE_GAME_BEGIN) {
+    //console.log('hello from GET_SINGLE_GAME_BEGIN');
+    return { ...state, isGameLoading: true };
   }
   if (action.type === GET_GAMES_SUCCESS) {
-    console.log(action.payload);
-    return { ...state, isLoading: false, data: action.payload };
+    //console.log('hello from GET_GAMES_SUCCESS)');
+    return { ...state, areGamesLoading: false, data: action.payload };
   }
-
+  if (action.type === GET_SINGLE_GAME_SUCCESS) {
+    //console.log('hello from GET_SINGLE_GAME_SUCCESS');
+    return { ...state, isGameLoading: false, singleData: action.payload };
+  }
+  if (action.type === GET_GAMES_ERROR) {
+    return { ...state, areGamesLoading: false, isGameLoading: false, error: { show: true, msg: action.payload } };
+  }
   if (action.type === CHANGE_PAGE) {
     let { page, data } = state;
     if (action.payload === 'next') {

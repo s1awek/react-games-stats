@@ -2,20 +2,23 @@
 
 import React, { useContext, useEffect, useReducer } from 'react';
 import { reducer } from '../reducers/reducer';
-import { GET_GAMES_ERROR, GET_GAMES_SUCCESS, GET_GAMES_BEGIN, SEARCH, CHANGE_PAGE } from '../actions/action';
+import { AUTH_API_ENDPOINT, bodyString } from '../utils/constants';
+import { GET_GAMES_ERROR, GET_GAMES_SUCCESS, GET_GAMES_BEGIN, SEARCH, CHANGE_PAGE, GET_SINGLE_GAME_SUCCESS, GET_SINGLE_GAME_BEGIN, GET_SINGLE_GAME_ERROR } from '../actions/action';
 const Context = React.createContext();
-const AUTH_API_ENDPOINT = `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_ID}&client_secret=${process.env.REACT_APP_TWITCH_SECRET}&grant_type=client_credentials`;
+
 export const Provider = ({ children }) => {
   const initialState = {
     searchTerm: '',
-    isLoading: true,
+    areGamesLoading: true,
+    isGameLoading: true,
     error: { show: false, msg: '' },
     data: [],
+    singleData: [],
     limit: 12,
     offset: 0,
     page: 1,
     endpoint: 'games',
-    body: 'fields *, cover.*, websites.*, alternative_names.*, external_games.*, game_modes.*, genres.*, involved_companies.company.*, game_engines.*, keywords.*, screenshots.*, release_dates.*, platforms.*, similar_games.*, themes.*,player_perspectives.*,screenshots.*; sort rating asc;',
+    body: bodyString,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -23,43 +26,59 @@ export const Provider = ({ children }) => {
     const searchTerm = e.target.value;
     dispatch({ type: SEARCH, payload: { searchTerm } });
   };
-  //TODO: Refactor fetching function
-  const fetchTwitchData = (gamesURL) => {
-    const { endpoint, body, limit, offset } = gamesURL;
-    dispatch({ type: GET_GAMES_BEGIN });
-    let tempBody = `${body}limit ${limit}; offset ${offset};`;
-    fetch(AUTH_API_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((data) => {
-        if (data.ok) return data.json();
-        dispatch({ type: GET_GAMES_ERROR, payload: { show: true, msg: 'Something went wrong' } });
-        throw new Error('Something went wrong');
-      })
-      .then((res) => {
-        return res.access_token;
-      })
-      .then(async (token) => {
-        const headers = { 'Client-ID': process.env.REACT_APP_TWITCH_ID, 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/json' };
-        const requestOptions = {
+
+  const fetchGames = async (urlData, type = 'games', id = null) => {
+    const { endpoint, body, limit, offset } = urlData;
+    let token = '';
+    let newBody = `${body} limit ${limit}; offset ${offset};`;
+    if (id) {
+      newBody = `${body} where id = ${id};`;
+    }
+    if (type === 'games') {
+      dispatch({ type: GET_GAMES_BEGIN });
+    }
+
+    if (type === 'single') {
+      dispatch({ type: GET_SINGLE_GAME_BEGIN });
+    }
+    try {
+      const response = await fetch(AUTH_API_ENDPOINT, { method: 'POST' });
+      if (response.ok) {
+        const data = await response.json();
+        token = data.access_token;
+      }
+    } catch (error) {
+      dispatch({ type: GET_GAMES_ERROR, payload: error.message });
+    }
+
+    if (token.length) {
+      try {
+        const headers = {
+          'Client-ID': process.env.REACT_APP_TWITCH_ID,
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        };
+        const config = {
           method: 'POST',
           headers,
-          body: tempBody,
+          body: newBody,
         };
-        const response = await fetch(`/v4/${endpoint}`, requestOptions);
-        if (!response.ok) {
-          dispatch({ type: GET_GAMES_ERROR, payload: { show: true, msg: 'Something went wrong' } });
-          throw new Error('Something went wrong');
-        }
+
+        const response = await fetch(`/v4/${endpoint}`, config);
         const data = await response.json();
-        dispatch({ type: GET_GAMES_SUCCESS, payload: data });
-      })
-      .catch((error) => {
-        dispatch({ type: GET_GAMES_ERROR, payload: { show: true, msg: error.message } });
-      });
+        if (type === 'games') {
+          dispatch({ type: GET_GAMES_SUCCESS, payload: data });
+        }
+        if (type === 'single') {
+          dispatch({ type: GET_SINGLE_GAME_SUCCESS, payload: data });
+        }
+      } catch (error) {
+        dispatch({ type: GET_GAMES_ERROR, payload: error.message });
+      }
+    } else {
+      dispatch({ type: GET_GAMES_ERROR, payload: 'Something went wrong' });
+    }
   };
 
   const changePage = (type) => {
@@ -67,10 +86,10 @@ export const Provider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchTwitchData(state);
+    fetchGames(state);
   }, [state.page]);
 
-  return <Context.Provider value={{ ...state, handleSearch, fetchTwitchData, changePage }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ ...state, handleSearch, changePage, fetchGames }}>{children}</Context.Provider>;
 };
 
 export const useGlobalContext = () => {
