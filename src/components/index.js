@@ -8,4 +8,5 @@ import { Sidebar } from './Sidebar';
 import { GamesList } from './GamesList';
 import { GameBox } from './GameBox';
 import { PagePagination } from './PagePagination';
-export { Loading, Error, Header, Footer, Sidebar, GamesList, GameBox, PagePagination };
+import { Rating } from './Rating';
+export { Loading, Error, Header, Footer, Sidebar, GamesList, GameBox, PagePagination, Rating };

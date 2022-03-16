@@ -4,7 +4,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGlobalContext } from '../context/context';
-import { Loading, Error } from '../components';
+import { Loading, Error, Rating } from '../components';
 import { bodyString } from '../utils/constants';
 import styled from 'styled-components';
 import placeholder from '../assets/img/game-placeholder.jpg';
@@ -26,7 +26,7 @@ export const SingleGamePage = () => {
     );
   if (error.show) return <Error />;
 
-  const { name, cover, screenshots, first_release_date, involved_companies } = singleData[0];
+  const { name, cover, screenshots, first_release_date, involved_companies, rating, rating_count, summary } = singleData[0];
   const bgImg = cover?.url?.replace('thumb', '1080p') || screenshots?.url[0]?.replace('thumb', '1080p') || placeholder;
   const coverImg = cover?.url?.replace('thumb', 'cover_big').replace('jpg', 'png') || placeholder;
   //const coverImgObj = cover || placeholder;
@@ -54,16 +54,38 @@ export const SingleGamePage = () => {
             <Col md={6}>
               <div className='meta-wrap d-flex flex-column justify-content-end h-100 pb-4'>
                 <h1 className='white title mb-4'>{name}</h1>
-                <h4 className='white subtitle'>
-                  {new Date(first_release_date).toLocaleString('default', { month: 'short' })}, {new Date(first_release_date).getFullYear()}
-                </h4>
-                {console.log(involved_companies[0]?.company?.name)}
-                <h5 className='white subtitle subtitle--company fst-italic mb-0'>by {involved_companies[0]?.company?.name}</h5>
+                {first_release_date ? (
+                  <h4 className='white subtitle'>
+                    {new Date(first_release_date * 1000).toLocaleString('default', { month: 'short' })}, {new Date(first_release_date * 1000).getFullYear()}
+                  </h4>
+                ) : (
+                  ''
+                )}
+                {involved_companies ? <h5 className='white subtitle subtitle--company fst-italic mb-0'>by {involved_companies[0]?.company?.name}</h5> : ''}
               </div>
             </Col>
           </Row>
         </Container>
       </div>
+      <Container>
+        <Row className='row-content'>
+          <Col className='col-content' lg={8}>
+            <p>{summary}</p>
+          </Col>
+          <Col className='d-flex col-rating' lg={4}>
+            <RatingWrap className='pt-1'>
+              <Rating props={{ rating, rating_count }} />
+            </RatingWrap>
+            {rating_count ? (
+              <p className='mb-0 d-flex align-items-center'>
+                Based on <strong>{rating_count}</strong> rating{rating_count === 1 ? '' : 's'}
+              </p>
+            ) : (
+              <p className='mb-0'>Rating unavailable</p>
+            )}
+          </Col>
+        </Row>
+      </Container>
     </Wrapper>
   );
 };
@@ -73,6 +95,12 @@ const LoadingWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const RatingWrap = styled.div`
+  height: 100px;
+  width: 100px;
+  margin-right: 1rem;
 `;
 
 const Wrapper = styled.section`
@@ -99,5 +127,17 @@ const Wrapper = styled.section`
     .subtitle {
       opacity: 0.85;
     }
+  }
+  .row-content {
+    padding-top: 6rem;
+  }
+  .col-rating {
+    p {
+      opacity: 0.6;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+  .col-content {
   }
 `;
