@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export const Loading = () => {
   return (
     <Wrapper>
-      <h2>Loading...</h2>
+      <h2 className='text-center'>Loading...</h2>
     </Wrapper>
   );
 };
