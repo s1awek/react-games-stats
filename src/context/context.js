@@ -87,7 +87,6 @@ export const Provider = ({ children }) => {
 
   useEffect(() => {
     fetchGames(state);
-    console.log(state);
   }, [state.page]);
 
   return <Context.Provider value={{ ...state, handleSearch, changePage, fetchGames }}>{children}</Context.Provider>;

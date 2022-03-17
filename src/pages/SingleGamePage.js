@@ -1,14 +1,15 @@
 /** @format */
 
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGlobalContext } from '../context/context';
-import { Loading, Error, Rating } from '../components';
+import { Loading, Error, Rating, Summary, Metadata } from '../components';
 import { bodyString } from '../utils/constants';
 import styled from 'styled-components';
 import placeholder from '../assets/img/game-placeholder.jpg';
 import { Col, Container, Row } from 'react-bootstrap';
+import { variables } from '../scss/variables';
 
 export const SingleGamePage = () => {
   const { isGameLoading, error, fetchGames, singleData } = useGlobalContext();
@@ -26,7 +27,7 @@ export const SingleGamePage = () => {
     );
   if (error.show) return <Error />;
 
-  const { name, cover, screenshots, first_release_date, involved_companies, rating, rating_count, summary } = singleData[0];
+  const { name, cover, screenshots, first_release_date, involved_companies, rating, rating_count } = singleData[0];
   const bgImg = cover?.url?.replace('thumb', '1080p') || screenshots?.url[0]?.replace('thumb', '1080p') || placeholder;
   const coverImg = cover?.url?.replace('thumb', 'cover_big').replace('jpg', 'png') || placeholder;
   //const coverImgObj = cover || placeholder;
@@ -37,7 +38,6 @@ export const SingleGamePage = () => {
   if (cover) {
     imgWidth = getWidth(cover.width, cover.height, 364) + 'px';
   }
-  console.log(singleData[0]);
   return (
     <Wrapper className='single-game'>
       <div className='top-cover position-relative d-flex'>
@@ -70,19 +70,24 @@ export const SingleGamePage = () => {
       <Container>
         <Row className='row-content'>
           <Col className='col-content' lg={8}>
-            <p>{summary}</p>
+            <Summary />
           </Col>
-          <Col className='d-flex col-rating' lg={4}>
-            <RatingWrap className='pt-1'>
-              <Rating props={{ rating, rating_count }} />
-            </RatingWrap>
-            {rating_count ? (
-              <p className='mb-0 d-flex align-items-center'>
-                Based on <strong>{rating_count}</strong> rating{rating_count === 1 ? '' : 's'}
-              </p>
-            ) : (
-              <p className='mb-0'>Rating unavailable</p>
-            )}
+          <Col className='col-rating pt-1' lg={4}>
+            <div className='col-rating__inner d-flex mb-3'>
+              <RatingWrap>
+                <Rating props={{ rating, rating_count }} />
+              </RatingWrap>
+              {rating_count ? (
+                <div className=' d-flex align-items-center'>
+                  <p className='mb-0'>
+                    Based on <strong>{rating_count}</strong> rating{rating_count === 1 ? '' : 's'}
+                  </p>
+                </div>
+              ) : (
+                <p className='mb-0'>Rating unavailable</p>
+              )}
+            </div>
+            <Metadata />
           </Col>
         </Row>
       </Container>
@@ -139,5 +144,11 @@ const Wrapper = styled.section`
     }
   }
   .col-content {
+  }
+  .sumary-outer {
+    max-height: 150px;
+    height: 100%;
+    overflow: hidden;
+    transition: ${variables.transition};
   }
 `;
