@@ -70,7 +70,7 @@ export const SingleGamePage = () => {
         <Row className='row-content'>
           <Col className='col-content' lg={8}>
             <Summary />
-            {screenshots.length && (
+            {screenshots?.length && (
               <div className='mt-4'>
                 <Screenshots />
               </div>
@@ -88,7 +88,9 @@ export const SingleGamePage = () => {
                   </p>
                 </div>
               ) : (
-                <p className='mb-0'>Rating unavailable</p>
+                <div className=' d-flex align-items-center'>
+                  <p className='mb-0'>Rating unavailable</p>
+                </div>
               )}
             </div>
             <Metadata />

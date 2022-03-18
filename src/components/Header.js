@@ -1,13 +1,14 @@
 /** @format */
 
 import React from 'react';
-import { Nav, Navbar, Container, Button, Form, FormControl, Image } from 'react-bootstrap';
+import { Nav, Navbar, Container, Form, FormControl, Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import logo from '../assets/img/logo.svg';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useGlobalContext } from '../context/context';
+import { Search } from '../components';
 export const Header = () => {
-  const { handleSearch, serachTerm } = useGlobalContext();
+  //const {  } = useGlobalContext();
   return (
     <Wrapper>
       <Navbar bg='dark' variant='dark' expand='lg'>
@@ -27,10 +28,7 @@ export const Header = () => {
                 <Nav.Link>Contact</Nav.Link>
               </LinkContainer>
             </Nav>
-            <Form className='d-flex'>
-              <FormControl type='search' placeholder='Search' className='me-2' aria-label='Search' value={serachTerm} onChange={handleSearch} />
-              <Button variant='primary'>Search</Button>
-            </Form>
+            <Search />
           </Navbar.Collapse>
         </Container>
       </Navbar>

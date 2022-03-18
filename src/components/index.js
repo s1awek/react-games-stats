@@ -13,4 +13,5 @@ import { Summary } from './Summary';
 import { Metadata } from './Metadata';
 import { SingleMetadata } from './SingleMetadata';
 import { Screenshots } from './Screenshots';
-export { Loading, Error, Header, Footer, Sidebar, GamesList, GameBox, PagePagination, Rating, Summary, Metadata, SingleMetadata, Screenshots };
+import { Search } from './Search';
+export { Loading, Error, Header, Footer, Sidebar, GamesList, GameBox, PagePagination, Rating, Summary, Metadata, SingleMetadata, Screenshots, Search };

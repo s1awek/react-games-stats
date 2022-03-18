@@ -1,11 +1,41 @@
 /** @format */
 
-import { SEARCH, GET_GAMES_BEGIN, GET_GAMES_ERROR, GET_GAMES_SUCCESS, CHANGE_PAGE, GET_SINGLE_GAME_SUCCESS, GET_SINGLE_GAME_BEGIN, GET_SINGLE_GAME_ERROR } from '../actions/action';
+import {
+  SEARCH_BEGIN,
+  SEARCH_ERROR,
+  SEARCH_SUCCESS,
+  SEARCH_HANDLER,
+  GET_GAMES_BEGIN,
+  GET_GAMES_ERROR,
+  GET_GAMES_SUCCESS,
+  CHANGE_PAGE,
+  GET_SINGLE_GAME_SUCCESS,
+  GET_SINGLE_GAME_BEGIN,
+  GET_SINGLE_GAME_ERROR,
+  SEARCH_MODAL_HANDLER,
+} from '../actions/action';
 
 export const reducer = (state, action) => {
-  if (action.type === SEARCH) {
+  if (action.type === SEARCH_MODAL_HANDLER) {
+    return { ...state, isSearchLoading: false, isSearchOpen: false, searchData: [], searchTerm: '' };
+  }
+  if (action.type === SEARCH_HANDLER) {
     const searchTerm = action.payload.searchTerm;
     return { ...state, searchTerm };
+  }
+  if (action.type === SEARCH_BEGIN) {
+    if (!state.searchTerm.length) {
+      return { ...state, isSearchLoading: false, isSearchOpen: false, searchData: [], searchTerm: '' };
+    }
+    return { ...state, isSearchLoading: true };
+  }
+  if (action.type === SEARCH_SUCCESS) {
+    //console.log(action.payload);
+    let tempIsSearchOpen = false;
+    if (action.payload.length) {
+      tempIsSearchOpen = true;
+    }
+    return { ...state, isSearchLoading: false, searchData: action.payload, isSearchOpen: tempIsSearchOpen };
   }
   if (action.type === GET_GAMES_BEGIN) {
     //console.log('hello from GET_GAMES_BEGIN');
@@ -25,7 +55,7 @@ export const reducer = (state, action) => {
     return { ...state, isGameLoading: false, singleData: action.payload };
   }
   if (action.type === GET_GAMES_ERROR) {
-    return { ...state, areGamesLoading: false, isGameLoading: false, error: { show: true, msg: action.payload } };
+    return { ...state, areGamesLoading: false, isSearchLoading: false, isGameLoading: false, error: { show: true, msg: action.payload } };
   }
   if (action.type === CHANGE_PAGE) {
     let { page, data } = state;

@@ -3,7 +3,20 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import { reducer } from '../reducers/reducer';
 import { AUTH_API_ENDPOINT, bodyString } from '../utils/constants';
-import { GET_GAMES_ERROR, GET_GAMES_SUCCESS, GET_GAMES_BEGIN, SEARCH, CHANGE_PAGE, GET_SINGLE_GAME_SUCCESS, GET_SINGLE_GAME_BEGIN, GET_SINGLE_GAME_ERROR } from '../actions/action';
+import {
+  GET_GAMES_ERROR,
+  GET_GAMES_SUCCESS,
+  GET_GAMES_BEGIN,
+  SEARCH_BEGIN,
+  SEARCH_ERROR,
+  SEARCH_SUCCESS,
+  CHANGE_PAGE,
+  GET_SINGLE_GAME_SUCCESS,
+  GET_SINGLE_GAME_BEGIN,
+  GET_SINGLE_GAME_ERROR,
+  SEARCH_HANDLER,
+  SEARCH_MODAL_HANDLER,
+} from '../actions/action';
 const Context = React.createContext();
 
 export const Provider = ({ children }) => {
@@ -11,9 +24,12 @@ export const Provider = ({ children }) => {
     searchTerm: '',
     areGamesLoading: true,
     isGameLoading: true,
+    isSearchLoading: true,
+    isSearchOpen: false,
     error: { show: false, msg: '' },
     data: [],
     singleData: [],
+    searchData: [],
     limit: 12,
     offset: 0,
     page: 1,
@@ -24,9 +40,12 @@ export const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
-    dispatch({ type: SEARCH, payload: { searchTerm } });
+    dispatch({ type: SEARCH_HANDLER, payload: { searchTerm } });
   };
 
+  const handleSearchModal = () => {
+    dispatch({ type: SEARCH_MODAL_HANDLER });
+  };
   const fetchGames = async (urlData, type = 'games', id = null) => {
     const { endpoint, body, limit, offset } = urlData;
     let token = '';
@@ -40,6 +59,14 @@ export const Provider = ({ children }) => {
 
     if (type === 'single') {
       dispatch({ type: GET_SINGLE_GAME_BEGIN });
+    }
+    if (type === 'search') {
+      dispatch({ type: SEARCH_BEGIN });
+      if (state.searchTerm.length) {
+        newBody = `fields *, cover.*, themes.*; limit: 50; where name ~ *"${state.searchTerm}"*;`;
+      } else {
+        return;
+      }
     }
     try {
       const response = await fetch(AUTH_API_ENDPOINT, { method: 'POST' });
@@ -64,7 +91,6 @@ export const Provider = ({ children }) => {
           headers,
           body: newBody,
         };
-
         const response = await fetch(`/v4/${endpoint}`, config);
         const data = await response.json();
         if (type === 'games') {
@@ -72,6 +98,9 @@ export const Provider = ({ children }) => {
         }
         if (type === 'single') {
           dispatch({ type: GET_SINGLE_GAME_SUCCESS, payload: data });
+        }
+        if (type === 'search') {
+          dispatch({ type: SEARCH_SUCCESS, payload: data });
         }
       } catch (error) {
         dispatch({ type: GET_GAMES_ERROR, payload: error.message });
@@ -89,7 +118,7 @@ export const Provider = ({ children }) => {
     fetchGames(state);
   }, [state.page]);
 
-  return <Context.Provider value={{ ...state, handleSearch, changePage, fetchGames }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ ...state, handleSearch, changePage, fetchGames, handleSearchModal }}>{children}</Context.Provider>;
 };
 
 export const useGlobalContext = () => {
