@@ -4,7 +4,7 @@ import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGlobalContext } from '../context/context';
-import { Loading, Error, Rating, Summary, Metadata } from '../components';
+import { Loading, Error, Rating, Summary, Metadata, Screenshots } from '../components';
 import { bodyString } from '../utils/constants';
 import styled from 'styled-components';
 import placeholder from '../assets/img/game-placeholder.jpg';
@@ -28,9 +28,8 @@ export const SingleGamePage = () => {
   if (error.show) return <Error />;
 
   const { name, cover, screenshots, first_release_date, involved_companies, rating, rating_count } = singleData[0];
-  const bgImg = cover?.url?.replace('thumb', '1080p') || screenshots?.url[0]?.replace('thumb', '1080p') || placeholder;
+  const bgImg = (screenshots?.length && screenshots[0]?.url.replace('thumb', '1080p')) || cover?.url?.replace('thumb', '1080p') || placeholder;
   const coverImg = cover?.url?.replace('thumb', 'cover_big').replace('jpg', 'png') || placeholder;
-  //const coverImgObj = cover || placeholder;
   let imgWidth = '274px';
   const getWidth = (width, height, maxHeight) => {
     return Math.floor(maxHeight / (height / width));
@@ -71,6 +70,11 @@ export const SingleGamePage = () => {
         <Row className='row-content'>
           <Col className='col-content' lg={8}>
             <Summary />
+            {screenshots.length && (
+              <div className='mt-4'>
+                <Screenshots />
+              </div>
+            )}
           </Col>
           <Col className='col-rating pt-1' lg={4}>
             <div className='col-rating__inner d-flex mb-3'>
@@ -147,7 +151,6 @@ const Wrapper = styled.section`
   }
   .sumary-outer {
     max-height: 150px;
-    height: 100%;
     overflow: hidden;
     transition: ${variables.transition};
   }

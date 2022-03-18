@@ -22,7 +22,7 @@ export const Summary = () => {
     const innerDims = collapseInner.current.getBoundingClientRect();
     const outerDims = collapseOuter.current.getBoundingClientRect();
     if (innerDims.height > outerDims.height) {
-      collapseOuter.current.style.maxHeight = '100%';
+      collapseOuter.current.style.maxHeight = `${innerDims.height + 10}px`;
       collapseOuter.current.style.height = `${outerDims.height}px`;
       collapseOuter.current.style.height = `${innerDims.height + 10}px`;
       e.target.textContent = 'Read less...';
