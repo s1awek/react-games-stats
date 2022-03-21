@@ -6,13 +6,17 @@ import { Error, Loading, GameBox, PagePagination } from '../components';
 import { Row, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 export const GamesList = () => {
-  const { areGamesLoading, error, data } = useGlobalContext();
+  const { areGamesLoading, gamesError: error, data } = useGlobalContext();
   if (error.show) {
     return <Error />;
   }
   return (
     <Wrapper className='main'>
-      {areGamesLoading && <Loading />}
+      {areGamesLoading && (
+        <LoadingWrap>
+          <Loading />
+        </LoadingWrap>
+      )}
       <Row className={`games-row gy-5${areGamesLoading ? ' loading' : ''}`}>
         {data.map((game) => {
           return (
@@ -29,7 +33,7 @@ export const GamesList = () => {
       </Row>
     </Wrapper>
   );
-};;
+};
 
 const Wrapper = styled.main`
   .games-row {
@@ -48,4 +52,11 @@ const Wrapper = styled.main`
       }
     }
   }
+`;
+
+const LoadingWrap = styled.div`
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

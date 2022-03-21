@@ -8,7 +8,6 @@ import {
   GET_GAMES_SUCCESS,
   GET_GAMES_BEGIN,
   SEARCH_BEGIN,
-  SEARCH_ERROR,
   SEARCH_SUCCESS,
   CHANGE_PAGE,
   GET_SINGLE_GAME_SUCCESS,
@@ -16,6 +15,8 @@ import {
   GET_SINGLE_GAME_ERROR,
   SEARCH_HANDLER,
   SEARCH_MODAL_HANDLER,
+  SET_ERROR,
+  SET_LOADING,
 } from '../actions/action';
 const Context = React.createContext();
 
@@ -26,7 +27,8 @@ export const Provider = ({ children }) => {
     isGameLoading: true,
     isSearchLoading: true,
     isSearchOpen: false,
-    error: { show: false, msg: '' },
+    gamesError: { show: false, msg: '' },
+    singleGameError: { show: false, msg: '' },
     data: [],
     singleData: [],
     searchData: [],
@@ -45,6 +47,12 @@ export const Provider = ({ children }) => {
 
   const handleSearchModal = () => {
     dispatch({ type: SEARCH_MODAL_HANDLER });
+  };
+  const setError = (type, error) => {
+    dispatch({ type: SET_ERROR, payload: { type, error } });
+  };
+  const setLoading = (type, bool = true) => {
+    dispatch({ type: SET_LOADING, payload: { type, bool } });
   };
   const fetchGames = async (urlData, type = 'games', id = null) => {
     const { endpoint, body, limit, offset } = urlData;
@@ -91,13 +99,26 @@ export const Provider = ({ children }) => {
           headers,
           body: newBody,
         };
+
         const response = await fetch(`/v4/${endpoint}`, config);
+        if (!response.ok) {
+          if (type === 'games') {
+            dispatch({ type: GET_GAMES_SUCCESS, payload: data });
+          }
+          if (type === 'single') {
+            dispatch({ type: GET_SINGLE_GAME_ERROR, payload: 'Something went wrong' });
+          }
+        }
         const data = await response.json();
         if (type === 'games') {
           dispatch({ type: GET_GAMES_SUCCESS, payload: data });
         }
         if (type === 'single') {
-          dispatch({ type: GET_SINGLE_GAME_SUCCESS, payload: data });
+          if (data.length === 1) {
+            dispatch({ type: GET_SINGLE_GAME_SUCCESS, payload: data });
+          } else {
+            dispatch({ type: GET_SINGLE_GAME_ERROR, payload: 'Something went wrong' });
+          }
         }
         if (type === 'search') {
           dispatch({ type: SEARCH_SUCCESS, payload: data });
@@ -116,9 +137,10 @@ export const Provider = ({ children }) => {
 
   useEffect(() => {
     fetchGames(state);
+    // eslint-disable-next-line
   }, [state.page]);
 
-  return <Context.Provider value={{ ...state, handleSearch, changePage, fetchGames, handleSearchModal }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ ...state, handleSearch, changePage, fetchGames, handleSearchModal, setError, setLoading }}>{children}</Context.Provider>;
 };
 
 export const useGlobalContext = () => {

@@ -37,6 +37,9 @@ export const Header = () => {
 };
 
 const Wrapper = styled.div`
+  a {
+    box-shadow: none;
+  }
   .navbar-brand {
     height: 2rem;
     width: auto;

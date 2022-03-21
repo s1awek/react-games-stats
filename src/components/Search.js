@@ -13,6 +13,7 @@ export const Search = () => {
   const searchForm = useRef(null);
   useEffect(() => {
     fetchGames({ body: searchString, endpoint: 'games', isSearchLoading: true }, 'search');
+    // eslint-disable-next-line
   }, [searchTerm]);
 
   useEffect(() => {
@@ -26,9 +27,9 @@ export const Search = () => {
     return () => {
       document.removeEventListener('mousedown', checkIfClickedOutside);
     };
+    // eslint-disable-next-line
   }, [isSearchOpen]);
 
-  //console.log(searchData);
   return (
     <Wrapper ref={searchForm}>
       <Form className='d-flex'>
@@ -78,6 +79,14 @@ const Wrapper = styled.div`
     background-color: #fff;
     max-height: 200px;
     overflow: auto;
+    @media screen and (max-width: 991px) {
+      right: unset;
+      left: 0;
+    }
+    @media screen and (max-width: 450px) {
+      right: 7px;
+      width: auto;
+    }
     h4 {
       font-size: 13px;
       text-transform: uppercase;

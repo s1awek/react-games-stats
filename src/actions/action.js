@@ -16,3 +16,6 @@ export const SEARCH_HANDLER = 'SEARCH_HANDLER';
 export const SEARCH_MODAL_HANDLER = 'SEARCH_MODAL_HANDLER';
 
 export const CHANGE_PAGE = 'CHANGE_PAGE';
+
+export const SET_ERROR = 'SET_ERROR';
+export const SET_LOADING = 'SET_LOADING';

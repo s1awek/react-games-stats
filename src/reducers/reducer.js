@@ -1,8 +1,8 @@
 /** @format */
 
+import { type } from '@testing-library/user-event/dist/type';
 import {
   SEARCH_BEGIN,
-  SEARCH_ERROR,
   SEARCH_SUCCESS,
   SEARCH_HANDLER,
   GET_GAMES_BEGIN,
@@ -13,6 +13,8 @@ import {
   GET_SINGLE_GAME_BEGIN,
   GET_SINGLE_GAME_ERROR,
   SEARCH_MODAL_HANDLER,
+  SET_ERROR,
+  SET_LOADING,
 } from '../actions/action';
 
 export const reducer = (state, action) => {
@@ -55,7 +57,19 @@ export const reducer = (state, action) => {
     return { ...state, isGameLoading: false, singleData: action.payload };
   }
   if (action.type === GET_GAMES_ERROR) {
-    return { ...state, areGamesLoading: false, isSearchLoading: false, isGameLoading: false, error: { show: true, msg: action.payload } };
+    return { ...state, areGamesLoading: false, isSearchLoading: false, isGameLoading: false, gamesError: { show: true, msg: action.payload } };
+  }
+  if (action.type === GET_SINGLE_GAME_ERROR) {
+    return { ...state, areGamesLoading: false, isSearchLoading: false, isGameLoading: false, singleGameError: { show: true, msg: action.payload }, singleData: [] };
+  }
+  if (action.type === SET_ERROR) {
+    console.log([action.payload.type], action.payload.error);
+    return { ...state, [action.payload.type]: action.payload.error };
+  }
+  if (action.type === SET_LOADING) {
+    const { type, bool } = action.payload;
+    console.log('hello from SET_LOADING');
+    return { ...state, [type]: bool };
   }
   if (action.type === CHANGE_PAGE) {
     let { page, data } = state;

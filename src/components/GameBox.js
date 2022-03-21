@@ -7,7 +7,6 @@ import placeholder from '../assets/img/game-placeholder.jpg';
 import { variables } from '../scss/variables';
 
 export const GameBox = ({ game }) => {
-  //console.log(game);
   const { cover, name, screenshots } = game;
   return (
     <Wrapper>

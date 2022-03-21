@@ -8,7 +8,7 @@ export const Summary = () => {
   const collapseOuter = useRef(null);
   const [showReadMore, setShowReadMore] = useState(false);
   const { isGameLoading, singleData } = useGlobalContext();
-  const { summary } = singleData[0];
+  const { summary } = singleData[0] || {};
   useEffect(() => {
     if (collapseInner?.current && collapseOuter?.current) {
       if (collapseOuter.current.getBoundingClientRect().height < collapseInner.current.getBoundingClientRect().height) {
@@ -25,11 +25,11 @@ export const Summary = () => {
       collapseOuter.current.style.maxHeight = `${innerDims.height + 10}px`;
       collapseOuter.current.style.height = `${outerDims.height}px`;
       collapseOuter.current.style.height = `${innerDims.height + 10}px`;
-      e.target.textContent = 'Read less...';
+      e.target.textContent = 'Show less...';
     } else {
       collapseOuter.current.style.maxHeight = '';
       collapseOuter.current.style.height = `${outerDims.maxHeight}px`;
-      e.target.textContent = 'Read more...';
+      e.target.textContent = 'Show more...';
     }
   };
   return (
@@ -41,7 +41,7 @@ export const Summary = () => {
       </div>
       {showReadMore && (
         <button className='btn btn-secondary' onClick={toggleText}>
-          Read more...
+          Show more...
         </button>
       )}
     </>

@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGlobalContext } from '../context/context';
 import { Loading, Error, Rating, Summary, Metadata, Screenshots } from '../components';
@@ -12,13 +12,20 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { variables } from '../scss/variables';
 
 export const SingleGamePage = () => {
-  const { isGameLoading, error, fetchGames, singleData } = useGlobalContext();
+  const { isGameLoading, singleGameError: error, fetchGames, singleData, setError, setLoading } = useGlobalContext();
+
   let { id } = useParams();
   id = Number(id.split('-').at(-1));
   const body = bodyString;
   useEffect(() => {
     fetchGames({ body, endpoint: 'games', isGameLoading: true }, 'single', id);
   }, [id]);
+
+  useEffect(() => {
+    if (singleData.length && !singleData[0]?.status) {
+      setError('singleGameError', { show: false, msg: '' });
+    }
+  }, [singleData]);
   if (isGameLoading)
     return (
       <LoadingWrap>
@@ -26,8 +33,7 @@ export const SingleGamePage = () => {
       </LoadingWrap>
     );
   if (error.show) return <Error />;
-
-  const { name, cover, screenshots, first_release_date, involved_companies, rating, rating_count } = singleData[0];
+  const { name, cover, screenshots, first_release_date, involved_companies, rating, rating_count } = singleData[0] || {};
   const bgImg = (screenshots?.length && screenshots[0]?.url.replace('thumb', '1080p')) || cover?.url?.replace('thumb', '1080p') || placeholder;
   const coverImg = cover?.url?.replace('thumb', 'cover_big').replace('jpg', 'png') || placeholder;
   let imgWidth = '274px';
@@ -37,6 +43,7 @@ export const SingleGamePage = () => {
   if (cover) {
     imgWidth = getWidth(cover.width, cover.height, 364) + 'px';
   }
+
   return (
     <Wrapper className='single-game'>
       <div className='top-cover position-relative d-flex'>
@@ -117,6 +124,9 @@ const RatingWrap = styled.div`
 const Wrapper = styled.section`
   .top-cover {
     height: 500px;
+    @media screen and (max-width: 767px) {
+      height: auto;
+    }
     .img-wrap {
       overflow: hidden;
     }
@@ -130,6 +140,11 @@ const Wrapper = styled.section`
       position: relative;
       top: 5rem;
       height: 364px;
+      @media screen and (max-width: 767px) {
+        top: 0;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+      }
     }
     .col-img {
       display: flex;
@@ -141,6 +156,9 @@ const Wrapper = styled.section`
   }
   .row-content {
     padding-top: 6rem;
+    @media screen and (max-width: 767px) {
+      padding-top: 2rem;
+    }
   }
   .col-rating {
     p {
@@ -152,7 +170,7 @@ const Wrapper = styled.section`
   .col-content {
   }
   .sumary-outer {
-    max-height: 150px;
+    max-height: 148px;
     overflow: hidden;
     transition: ${variables.transition};
   }
