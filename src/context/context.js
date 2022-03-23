@@ -100,7 +100,7 @@ export const Provider = ({ children }) => {
           body: newBody,
         };
 
-        const response = await fetch(`/v4/${endpoint}`, config);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${endpoint}`, config);
         if (!response.ok) {
           if (type === 'games') {
             dispatch({ type: GET_GAMES_ERROR, payload: 'Something went wrong' });
