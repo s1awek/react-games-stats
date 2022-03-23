@@ -40,10 +40,7 @@ export const AboutPage = () => {
                   </a>
                 </p>
                 <p>
-                  You can direct any comments or questions to me via{' '}
-                  <Link target='_blank' rel='noopener nofollow noreferrer' to='/contact'>
-                    Contact page
-                  </Link>
+                  You can direct any comments or questions to me via <Link to='/contact'>Contact page</Link>
                 </p>
               </Card.Body>
             </Card>
