@@ -2,8 +2,9 @@
 # routing internally.
 [[redirects]]
   from = "/v4/*"
-  to = "https://api.igdb.com/v4/"
+  to = "https://api.igdb.com/v4/:splat"
   status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
