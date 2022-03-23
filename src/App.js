@@ -1,7 +1,7 @@
 /** @format */
 import React from 'react';
 import { Header, Footer } from './components';
-import { HomePage, SingleGamePage, ContactPage, ErrorPage } from './pages';
+import { HomePage, SingleGamePage, ContactPage, ErrorPage, AboutPage } from './pages';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 const App = () => {
   return (
@@ -14,6 +14,7 @@ const App = () => {
           <Route path='/' element={<HomePage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/games/:id' element={<SingleGamePage />} />
+          <Route path='/about' element={<AboutPage />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>
       </section>

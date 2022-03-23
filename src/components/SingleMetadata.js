@@ -17,7 +17,7 @@ export const SingleMetadata = ({ label, itemsArr }) => {
           if (label === 'websites') {
             return (
               <span key={index}>
-                <a href={item.url} target='_blank' rel='noopener nofollow'>
+                <a href={item.url} target='_blank' rel='noopener nofollow noreferrer'>
                   Link
                 </a>
                 {`${index + 1 < itemsArr.length ? ', ' : ''}`}

@@ -19,9 +19,7 @@ export const Metadata = () => {
     <div>
       {variablesArr.map((item, index) => {
         const { label, itemsArr } = item;
-        if (itemsArr.length) {
-          return <SingleMetadata key={index} label={label} itemsArr={itemsArr} />;
-        }
+        return <SingleMetadata key={index} label={label} itemsArr={itemsArr} />;
       })}
     </div>
   );

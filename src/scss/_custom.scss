@@ -67,6 +67,13 @@ a {
 .white {
   color: #fff;
 }
+.icon {
+  box-shadow: none;
+
+  &:hover {
+    box-shadow: none;
+  }
+}
 
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';

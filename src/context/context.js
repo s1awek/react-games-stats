@@ -103,10 +103,12 @@ export const Provider = ({ children }) => {
         const response = await fetch(`/v4/${endpoint}`, config);
         if (!response.ok) {
           if (type === 'games') {
-            dispatch({ type: GET_GAMES_SUCCESS, payload: data });
+            dispatch({ type: GET_GAMES_ERROR, payload: 'Something went wrong' });
+            return;
           }
           if (type === 'single') {
             dispatch({ type: GET_SINGLE_GAME_ERROR, payload: 'Something went wrong' });
+            return;
           }
         }
         const data = await response.json();

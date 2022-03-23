@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { CircularProgressbarWithChildren, buildStyles, CircularProgressbar } from 'react-circular-progressbar';
+import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 export const Rating = ({ props: { rating, rating_count } }) => {
   let percentage = 0;

@@ -12,19 +12,21 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { variables } from '../scss/variables';
 
 export const SingleGamePage = () => {
-  const { isGameLoading, singleGameError: error, fetchGames, singleData, setError, setLoading } = useGlobalContext();
+  const { isGameLoading, singleGameError: error, fetchGames, singleData, setError } = useGlobalContext();
 
   let { id } = useParams();
   id = Number(id.split('-').at(-1));
   const body = bodyString;
   useEffect(() => {
     fetchGames({ body, endpoint: 'games', isGameLoading: true }, 'single', id);
+    // eslint-disable-next-line
   }, [id]);
 
   useEffect(() => {
     if (singleData.length && !singleData[0]?.status) {
       setError('singleGameError', { show: false, msg: '' });
     }
+    // eslint-disable-next-line
   }, [singleData]);
   if (isGameLoading)
     return (

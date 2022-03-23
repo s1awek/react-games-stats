@@ -1,6 +1,5 @@
 /** @format */
 
-import { type } from '@testing-library/user-event/dist/type';
 import {
   SEARCH_BEGIN,
   SEARCH_SUCCESS,
@@ -63,12 +62,10 @@ export const reducer = (state, action) => {
     return { ...state, areGamesLoading: false, isSearchLoading: false, isGameLoading: false, singleGameError: { show: true, msg: action.payload }, singleData: [] };
   }
   if (action.type === SET_ERROR) {
-    console.log([action.payload.type], action.payload.error);
     return { ...state, [action.payload.type]: action.payload.error };
   }
   if (action.type === SET_LOADING) {
     const { type, bool } = action.payload;
-    console.log('hello from SET_LOADING');
     return { ...state, [type]: bool };
   }
   if (action.type === CHANGE_PAGE) {

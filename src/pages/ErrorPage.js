@@ -2,11 +2,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useGlobalContext } from '../context/context';
 
 export const ErrorPage = () => {
-  const { isGameLoading } = useGlobalContext();
-
   return (
     <div>
       <h1 className='text-center'>404</h1>

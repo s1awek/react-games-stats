@@ -1,14 +1,12 @@
 /** @format */
 
 import React from 'react';
-import { Nav, Navbar, Container, Form, FormControl, Image } from 'react-bootstrap';
+import { Nav, Navbar, Container, Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import logo from '../assets/img/logo.svg';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useGlobalContext } from '../context/context';
 import { Search } from '../components';
 export const Header = () => {
-  //const {  } = useGlobalContext();
   return (
     <Wrapper>
       <Navbar bg='dark' variant='dark' expand='lg'>
@@ -26,6 +24,9 @@ export const Header = () => {
               </LinkContainer>
               <LinkContainer to='/contact'>
                 <Nav.Link>Contact</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to='/about'>
+                <Nav.Link>About</Nav.Link>
               </LinkContainer>
             </Nav>
             <Search />
