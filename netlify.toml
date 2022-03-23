@@ -4,6 +4,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+[[redirects]]
+  from = "/v4/*"
+  to = "https://api.igdb.com/v4/"
+  status = 200
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
